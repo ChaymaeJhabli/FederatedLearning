@@ -71,3 +71,96 @@ In the context of federated learning, understanding the impact of data partition
 - Federated learning with IID partitioning showed promising results, achieving competitive accuracies on both training and validation datasets.
 - Non-IID partitioning, while resulting in high training accuracies, exhibited challenges in generalizing to unseen data, as evidenced by lower validation and test accuracies.
 - Further research and experimentation are warranted to optimize federated learning approaches for DistilBERT models, especially in scenarios involving non-IID data distributions.
+
+# RoBERTa for Depression Prediction
+
+## Introduction
+
+The project explores the impact of applying Differential Privacy (DP) and Federated Learning (FL) to contextualized language models such as BERT, ALBERT, RoBERTa, and DistilBERT.
+
+## RoBERTa Model
+
+RoBERTa is an improved version of the BERT model designed to enhance the pre-training phase and boost performance on various NLP tasks. Developed by Facebook AI in 2019, RoBERTa makes several modifications to the original BERT model, focusing on training procedures and hyperparameters to achieve better results.
+
+## Methodology
+
+### Data Preprocessing
+
+- Data cleaning and shuffle: Tweets were preprocessed by removing mentions, hashtags, URLs, and special characters. A shuffle was made to prevent the model from biases by the order of the data. Text was also converted to lowercase.
+
+### Training and Validation
+
+During training on a dataset of annotated tweets for depression, the model demonstrates progressive improvement in accuracy compared to the author's results.
+
+### Results Obtained
+
+Post-training evaluation showcases promising performance metrics. The model achieves a commendable accuracy of 92.07% on the training set. The model showcases robust generalization capabilities, evidenced by an accuracy of 92.67% on the testing set.
+
+## Conclusion
+
+In conclusion, the RoBERTa model achieve state-of-the-art results across multiple NLP tasks, making it a powerful tool for various applications in natural language understanding and generation.
+
+# Federated Learning for RoBERTa
+
+## Overview
+
+This project explores the application of Federated Learning techniques to train a RoBERTa model for sentiment analysis (our case treat depression prediction). Federated Learning (FL) is a decentralized approach to machine learning where multiple devices or servers collaboratively train a model while keeping the data localized. Unlike traditional centralized learning, where data from all sources is aggregated into a single repository for training, FL allows data to remain distributed across its original locations.
+
+## Methodology
+
+### Data Preprocessing
+
+- Data cleaning and shuffle: Tweets were preprocessed by removing mentions, hashtags, URLs, and special characters. A shuffle was made to prevent the model from biases by the order of the data. Text was also converted to lowercase.
+- Data partitioning: Two methods were employed:
+  - IID (Independent and Identically Distributed): Data is evenly distributed across different clients.
+  - Non-IID: Data distribution is uneven, representing a more realistic scenario where data heterogeneity exists across clients.
+
+### Privacy Budgets (epsilon values)
+
+Privacy Budgets: Different privacy budgets (epsilon values) are tested to evaluate the trade-offs between privacy and model accuracy. Lower epsilon values indicate higher privacy.
+
+### Model Architecture
+
+- Customized RoBERTa model: A RoBERTa model was fine-tuned for sentiment analysis.
+
+### Training
+
+- Training rounds: The training process involved multiple rounds where clients locally trained their models on their data partitions and then communicated the updates to a central server.
+- Training parameters: 
+  - Learning rate: 1e-05
+  - Batch size: 10
+  - Number of clients: 10
+  - Number of training passes on local datasets for each round: 1
+  - Nunber of training rounds: 3
+  - Loss function: Cross-Entropy Loss
+
+### Testing
+
+- Test dataset: Validation dataset was used for testing.
+- Test methodology: Model performance was evaluated using a separate validation dataset, leveraging PyTorch DataLoader.
+
+## Results
+
+### IID Partitioning
+
+- **Training Accuracy:** Achieved an higher accuracy of 99.72%.
+- **Test Accuracy:** Approximately 93.08%.
+
+### Non-IID Partitioning
+- **Training Accuracy:** Achieved an higher accuracy of 100%.
+- **Test Accuracy:** Approximately 90.71%.
+
+## Conclusion
+
+The study demonstrates that Federated Learning can provide better privacy-utility trade-offs, particularly under IID conditions.
+
+- FL-IID: Showed promising results with higher accuracy at moderate privacy budgets, demonstrating the efficacy of FL in preserving utility while maintaining privacy.
+- FL-Non IID: Results were generally lower than FL-IID due to data heterogeneity, but still showed feasible performance and FL's potential in real-world heterogeneous data scenarios.
+
+Lower epsilon values (higher privacy) significantly degrade model performance, especially in the FL-Non-IID setup.
+
+The FL-IID setup consistently yields higher accuracy compared to the FL-Non-IID setup, demonstrating the challenges posed by heterogeneous data distributions in federated learning environments.
+
+Federated Learning can provide competitive performance under certain conditions (especially FL-IID) but still lags behind centralized training without privacy constraints.
+
+The experiments demonstrate that while Federated Learning with RoBERTa shows promise, achieving optimal performance is highly dependent on data distribution and the level of privacy required. The FL-IID setup generally performs better, suggesting that strategies to mitigate the effects of data heterogeneity could improve outcomes in more realistic FL-Non-IID scenarios.
